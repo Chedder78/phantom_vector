@@ -1314,16 +1314,20 @@
         updateNebulaBackground();
         renderNebulaBackground();
         
-        if (demoMode) {
-            ctx.shadowBlur = 0;
-            ctx.fillStyle = colors.hud;
-            ctx.font = "48px 'Courier New', monospace";
+                if (demoMode) {
+            ctx.shadowColor = '#00ffff';
+            ctx.shadowBlur = 30;
+            ctx.fillStyle = '#00ffff';
+            ctx.font = "bold 48px 'Courier New', monospace";
             ctx.textAlign = "center";
             ctx.fillText("PHANTOM VECTOR", canvas.width / 2, canvas.height / 2 - 40);
-            ctx.font = "24px 'Courier New', monospace";
-            ctx.fillText("TAP TO INITIATE", canvas.width / 2, canvas.height / 2 + 20);
+            ctx.shadowBlur = 15;
+            ctx.fillStyle = '#ffffff';
+            ctx.font = "20px 'Courier New', monospace";
+            ctx.fillText("TAP OR PRESS ANY KEY TO START", canvas.width / 2, canvas.height / 2 + 20);
+            ctx.shadowBlur = 0;
             return;
-        }
+                }
         
         ctx.save();
         if (screenShake > 0) {
