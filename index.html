@@ -1313,26 +1313,35 @@
             ctx.fillText(`${activePowerUp}: ${timeLeft}s`, 20, 140);
         }
 
-         function draw() {
-           ctx.clearRect(0, 0, canvas.width, canvas.height);
-        
+             function draw() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
         updateNebulaBackground();
         renderNebulaBackground();
         
-                if (demoMode) {
+        if (demoMode) {
+            const time = Date.now() / 1000;
+            const pulse = Math.sin(time * 2) * 0.1 + 1;
             ctx.shadowColor = '#00ffff';
             ctx.shadowBlur = 30;
             ctx.fillStyle = '#00ffff';
-            ctx.font = "bold 48px 'Courier New', monospace";
-            ctx.textAlign = "center";
-            ctx.fillText("PHANTOM VECTOR", canvas.width / 2, canvas.height / 2 - 40);
-            ctx.shadowBlur = 15;
-            ctx.fillStyle = '#ffffff';
-            ctx.font = "20px 'Courier New', monospace";
-            ctx.fillText("TAP OR PRESS ANY KEY TO START", canvas.width / 2, canvas.height / 2 + 20);
+            ctx.font = `bold ${Math.floor(canvas.width * 0.06)}px "Courier New", monospace`;
+            ctx.textAlign = 'center';
+            ctx.save();
+            ctx.translate(canvas.width / 2, canvas.height / 2 - 40);
+            ctx.scale(pulse, pulse);
+            ctx.fillText('PHANTOM', 0, -25);
+            ctx.fillText('VECTOR', 0, 25);
+            ctx.restore();
             ctx.shadowBlur = 0;
+            ctx.fillStyle = 'rgba(0, 255, 255, 0.6)';
+            ctx.font = `${Math.floor(canvas.width * 0.02)}px "Courier New", monospace`;
+            ctx.fillText('A NEON ARCADE EXPERIENCE', canvas.width / 2, canvas.height / 2 + 30);
+            const tapAlpha = Math.sin(time * 3) * 0.3 + 0.7;
+            ctx.fillStyle = `rgba(255, 255, 255, ${tapAlpha})`;
+            ctx.font = '18px "Courier New", monospace';
+            ctx.fillText('TAP TO START', canvas.width / 2, canvas.height / 2 + 80);
             return;
-                }
+        }
         
         ctx.save();
         if (screenShake > 0) {
@@ -1342,13 +1351,11 @@
             screenShake--;
             screenShakeIntensity *= 0.9;
         }
-        
         if (chromaticAberrationIntensity > 0.5) {
             applyChromaticAberration((ox, oy) => drawGameObjects(ox, oy));
         } else {
             drawGameObjects(0, 0);
         }
-        
         if (timeWarpActive || activePowerUp === 'TEMPORAL_SHIFT') {
             ctx.fillStyle = 'rgba(128, 0, 255, 0.1)';
             ctx.fillRect(0, 0, canvas.width, canvas.height);
@@ -1357,9 +1364,7 @@
             ctx.fillStyle = 'rgba(0, 255, 100, 0.1)';
             ctx.fillRect(0, 0, canvas.width, canvas.height);
         }
-        
         drawHUD();
-        
         if (gameOver) {
             ctx.fillStyle = `rgba(10, 10, 18, ${fadeAlpha})`;
             ctx.fillRect(0, 0, canvas.width, canvas.height);
@@ -1379,10 +1384,8 @@
             ctx.fillText("PLAY AGAIN", playAgainRect.x + playAgainRect.w / 2, playAgainRect.y + 30);
             if (fadeAlpha < 0.7) fadeAlpha += 0.02;
         }
-        
         ctx.restore();
-                }
-
+             }
     // ===== UPDATE LOOP =====
     function update() {
         if (demoMode || !gameStarted) return;
