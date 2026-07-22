@@ -1308,16 +1308,8 @@
         }
     }
 
-    function draw() {
+        function draw() {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
-        ctx.save();
-        if (screenShake > 0) {
-            const shakeX = (Math.random() - 0.5) * screenShakeIntensity;
-            const shakeY = (Math.random() - 0.5) * screenShakeIntensity;
-            ctx.translate(shakeX, shakeY);
-            screenShake--;
-            screenShakeIntensity *= 0.9;
-        }
         
         updateNebulaBackground();
         renderNebulaBackground();
@@ -1327,11 +1319,19 @@
             ctx.fillStyle = colors.hud;
             ctx.font = "48px 'Courier New', monospace";
             ctx.textAlign = "center";
-            ctx.fillText("SYSTEM BOOT", canvas.width / 2, canvas.height / 2 - 30);
+            ctx.fillText("PHANTOM VECTOR", canvas.width / 2, canvas.height / 2 - 40);
             ctx.font = "24px 'Courier New', monospace";
             ctx.fillText("TAP TO INITIATE", canvas.width / 2, canvas.height / 2 + 20);
-            ctx.restore();
             return;
+        }
+        
+        ctx.save();
+        if (screenShake > 0) {
+            const shakeX = (Math.random() - 0.5) * screenShakeIntensity;
+            const shakeY = (Math.random() - 0.5) * screenShakeIntensity;
+            ctx.translate(shakeX, shakeY);
+            screenShake--;
+            screenShakeIntensity *= 0.9;
         }
         
         if (chromaticAberrationIntensity > 0.5) {
@@ -1359,7 +1359,7 @@
             ctx.textAlign = "center";
             ctx.fillText("SYSTEM FAILURE", canvas.width / 2, canvas.height / 2 - 20);
             ctx.font = "24px 'Courier New', monospace";
-            ctx.fillText(`REBOOT IN ${Math.ceil(countdownTimer / 60)}...`, canvas.width / 2, canvas.height / 2 + 20);
+            ctx.fillText(`FINAL SCORE: ${score}`, canvas.width / 2, canvas.height / 2 + 20);
             ctx.fillStyle = 'rgba(0, 255, 255, 0.2)';
             ctx.fillRect(playAgainRect.x, playAgainRect.y, playAgainRect.w, playAgainRect.h);
             ctx.strokeStyle = colors.hud;
@@ -1367,11 +1367,14 @@
             ctx.strokeRect(playAgainRect.x, playAgainRect.y, playAgainRect.w, playAgainRect.h);
             ctx.fillStyle = colors.hud;
             ctx.font = "20px 'Courier New', monospace";
-            ctx.fillText("MANUAL OVERRIDE", playAgainRect.x + playAgainRect.w / 2, playAgainRect.y + 30);
+            ctx.fillText("PLAY AGAIN", playAgainRect.x + playAgainRect.w / 2, playAgainRect.y + 30);
             if (fadeAlpha < 0.7) fadeAlpha += 0.02;
         }
+        
         ctx.restore();
     }
+
+    function update() {
 
     // ===== UPDATE LOOP =====
     function update() {
@@ -1832,10 +1835,13 @@
         }
     });
 
-    // ===== CANVAS CLICK =====
+        // ===== CANVAS CLICK =====
     canvas.addEventListener('click', (e) => {
         initAudio();
-        if (demoMode) return resetGame();
+        if (demoMode) {
+            resetGame();
+            return;
+        }
         if (gameOver) {
             const rect = canvas.getBoundingClientRect();
             const x = e.clientX - rect.left;
@@ -1847,7 +1853,7 @@
         }
     });
 
-    // ===== INITIALIZATION =====
+            // ===== INITIALIZATION =====
     window.addEventListener('resize', resizeCanvas);
     resizeCanvas();
     ship.x = canvas.width / 2;
@@ -1858,3 +1864,5 @@
     </script>
 </body>
 </html>
+
+
